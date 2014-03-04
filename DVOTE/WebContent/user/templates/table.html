@@ -1,0 +1,24 @@
+<div class="panel panel-default" ng-controller="TableCtrl">
+
+  <div ng-show="panelTitle" class="panel-heading"><strong>{{ panelTitle }}</strong></div>
+  
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th  ng-repeat="column in columns">{{ column.display }} </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  ng-repeat="item in items">
+          <td>{{ item.name }}</td>
+          <td>{{ item.leader }}</td>
+          <td>
+              <button ng-disabled="voted" ng-hide="item.loggedInUser" type="button" ng-click="vote(item)" class="btn btn-success">Vote</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+</div>

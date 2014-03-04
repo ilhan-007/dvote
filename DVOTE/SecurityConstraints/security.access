@@ -1,0 +1,18 @@
+[
+  {
+    "location":"/DVOTE/user",
+    "roles":
+      [
+        {"role":"User"},
+        {"role":"PowerUser"}
+      ]
+  },
+  {
+    "location":"/DVOTE/admin",
+    "roles":
+      [
+        {"role":"Administrator"}
+      ]
+  }
+]
+

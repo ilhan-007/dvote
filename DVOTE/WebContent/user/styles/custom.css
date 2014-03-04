@@ -1,0 +1,85 @@
+.order {
+  width: 10%;
+}
+
+.bid-row:hover {
+  cursor: pointer;
+  background-color: #eeeeee;
+}
+
+.gray {
+  background-color: #eeeeee;
+}
+.information {
+  font-size: 17px;
+}
+
+/*.information > .row [class^="col-"] {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}*/
+
+.bid-button-container {
+  margin-top: 36px;
+}
+
+.money {
+  font-size: 36px;
+}
+
+.margin-bottom {
+  margin-bottom: 50px;
+}
+
+.bid-button {
+  margin-bottom: 15px;
+}
+
+.modal {
+  background-color: rgba(238, 238, 238, 0.5);
+}
+
+.g-right {
+  float: right;
+}
+
+.g-poweredby {
+  padding-right: 15px
+}
+
+.dirigible-logo {
+  padding-top: 5px;
+}
+
+.auction-time {
+  padding: 0;
+  margin: 0;
+}
+
+.bid-brand {
+  font-size: 30px;
+}
+
+.no-top {
+  top: 0;
+}
+
+@media (min-width: 768px) {
+  .hidden-xs {
+    display: inline-block !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .visible-xs {
+    display: inline-block !important;
+  }
+}
+
+#timer span {
+  font-size: 26px;
+  font-weight: normal;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: center;
+}

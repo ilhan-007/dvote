@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="fileApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>DVOTE</title>
+
+   <link rel="stylesheet"  href="../../../components/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--<script src="../../../components/angular/angular.min.js"></script>-->
+    <!--<script src="../../../components/angular-resource/angular-resource.min.js"></script>-->
+    
+     <script src="components/angular/angular.min.js"></script>
+     <script src="components/angularresource/angular-resource.min.js"></script>
+     <script src="components/angularroute/angular-route.min.js"></script>
+  
+    <script src="scripts/app.js"></script>
+</head>
+
+<body>
+<div class="container">
+    
+    <div class="navbar navbar-default" role="navigation">
+          <a class="navbar-brand bid-brand" href="#/">DVOTE</a>
+          <ul class="nav navbar-nav navbar-right hidden-xs">
+            <li>
+              <a>{{ user }}</a>
+            </li>
+          </ul>
+          <div class="g-right g-poweredby">
+            <a class="navbar-text hidden-xs" href="https://dirigibleio.hanatrial.ondemand.com/dirigible/web/welcome/index.html">powered by</a>
+            <a href="https://dirigibleio.hanatrial.ondemand.com/dirigible/web/welcome/index.html">
+              <img class="dirigible-logo" src="images/dirigible.png" title="Powered by Dirigible">
+            </a>
+          </div>
+    </div>
+        
+        <div class="panel panel-warning">
+            <div class="panel-heading">Voting rules:</div>
+            <div ng-hide="voted" class="panel-body">
+                You can vote only once! You can vote by pressin over one of the teams!
+            </div>
+            
+             <div ng-show="voted" class="panel-body">
+                You`ve already voted!
+            </div>
+        </div>
+    
+    
+    <div ng-view class="margin-bottom"></div>
+
+  </div>
+  <!-- Reloading this iframe every 3 minutes to avoid session expiration... -->
+  <iframe id="ping-iframe" style="width: 0px; height: 0px"></iframe>
+ </body>
+</html>
