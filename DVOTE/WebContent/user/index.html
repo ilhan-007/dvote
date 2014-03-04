@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="fileApp">
+<html lang="en" ng-app>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,36 +22,61 @@
 </head>
 
 <body>
-<div class="container">
+<div class="container" ng-controller="VotesController">
     
     <div class="navbar navbar-default" role="navigation">
           <a class="navbar-brand bid-brand" href="#/">DVOTE</a>
           <ul class="nav navbar-nav navbar-right hidden-xs">
             <li>
-              <a>{{ user }}</a>
+              <a>{{ userInfo.loggedInUser }}</a>
             </li>
           </ul>
           <div class="g-right g-poweredby">
-            <a class="navbar-text hidden-xs" href="https://dirigibleio.hanatrial.ondemand.com/dirigible/web/welcome/index.html">powered by</a>
-            <a href="https://dirigibleio.hanatrial.ondemand.com/dirigible/web/welcome/index.html">
+            <a class="navbar-text hidden-xs" href="http://dirigible.io" target="_blank">powered by</a>
+            <a href="http://dirigible.io" target="_blank">
               <img class="dirigible-logo" src="images/dirigible.png" title="Powered by Dirigible">
             </a>
           </div>
     </div>
         
-        <div class="panel panel-warning">
-            <div class="panel-heading">Voting rules:</div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">Vote state:</div>
             <div ng-hide="voted" class="panel-body">
-                You can vote only once! You can vote by pressin over one of the teams!
+                <span class="label label-warning">You`ve not voted yet! Please, note! You can vote only once!</span>
             </div>
-            
-             <div ng-show="voted" class="panel-body">
-                You`ve already voted!
+            <div ng-show="voted" class="panel-body">
+                 <span class="label label-success">You`ve already voted!</span>
             </div>
         </div>
     
     
-    <div ng-view class="margin-bottom"></div>
+    <div class="panel panel-primary">
+
+    <div ng-show="panelTitle" class="panel-heading"><strong>{{ panelTitle }}</strong></div>
+  
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th  ng-repeat="column in columns">{{ column.display }} </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr  ng-repeat="item in items">
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.leader }}</td>
+                    <td>
+                          <button ng-disabled="voted" ng-hide="item.userInfo" type="button" ng-click="vote(item)" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                          </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+  
+    </div>
+
 
   </div>
   <!-- Reloading this iframe every 3 minutes to avoid session expiration... -->

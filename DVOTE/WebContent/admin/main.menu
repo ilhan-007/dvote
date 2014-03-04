@@ -3,10 +3,5 @@
         "name": "Add Team",
         "link": "addNew.html",
         "subMenu" : []
-    },
-    {
-        "name": "Standings",
-        "link": "standings.html",
-        "subMenu" : []
     }
 ]
