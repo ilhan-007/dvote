@@ -1,90 +1,52 @@
-var fileApp = angular.module('fileApp', [
-  'ngRoute',
-  'listControllers',
-  'listServices'
-]);
-
-fileApp.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-    when('/', {
-      templateUrl: 'templates/listView.html',
-      controller: 'ListCtrl'
-    }).
-    otherwise({
-      redirectTo: '/'
-    });
-  }
-]);
-
-var listControllers = angular.module('listControllers', []);
-
-
-listControllers.controller('AllTeams', ['$scope', '$timeout', 'Teams', '$http',
-  function($scope, $timeout, Teams, $http) {
-      
-    // setInterval(function() {
-    //   document.getElementById("ping-iframe").src = "pong.html";
-    // }, 180000);
+function VotesController($scope, $http){
+    var teamsUrl = "/dirigible/js-secured/DVOTE/user/team.js";
+    var votesUrl = "/dirigible/js-secured/DVOTE/user/vote.js";
     
-    $scope.panelTitle = "DCODE Teams";
-    (function tick() {
-      Teams.query({}, function(data) {
-        $scope.items = data;
-        $scope.timeout = $timeout(tick, 10000);
-      });
-    })();
-    $scope.getColumnData = function() {
-      return [{
-        name: 'id',
-        display: '#'
-      }, {
-        name: 'name',
-        display: 'Team'
-      }, {
-        name: 'leader',
-        display: 'Team Leader'
-      },
-      {
-        user: 'loggedInUser'
-      }];
-    }
-    var url = "/dirigible/js-secured/DVOTE/user/vote.js"
+    $scope.columns = [
+        {
+            name: 'name',
+            display: 'Team'
+        }, 
+        {
+            name: 'leader',
+            display: 'Team Leader'
+        },
+        {
+            user: 'userInfo'
+        }
+    ];
     
-     $scope.vote(entry){
-				$http.post(url, entry)
-				.success(function(){
-					refreshData();
-				})
-				.error(function(response){
-				});
-	}
+    refreshData();
     
     function refreshData(){
-        
+        $http.get(teamsUrl)
+            .success(function(data){
+                $scope.items = data;
+                for(var i = 0; i < data.length ; i ++){
+                    if(data[i].userInfo){
+                        $scope.userInfo = data[i].userInfo;
+                        $scope.voted = $scope.userInfo.voted;
+                    }
+                }
+            })
+            .error(function(data){
+                
+            });
     }
-  }
-]);
-
-listControllers.controller('TableCtrl', ['$scope', '$routeParams', '$timeout',
-  function($scope, $routeParams, $timeout) {
-    $scope.columns = $scope.getColumnData();
-  }
-]);
-
-
-listControllers.controller('ListCtrl', ['$scope',
-  function($scope) {
-    $scope.sth = true;
-  }
-]);
-
-
-var listServices = angular.module('listServices', ['ngResource']);
-
-listServices.factory('Teams', ['$resource',
-  function($resource) {
-    // [Maybe Teams]
-    return $resource('../../../js-secured/DVOTE/user/team.js');
-  }
-]);
+    
+    $scope.vote = function(team){
+        var vote = {};
+        vote.team_id = team.id;
+        vote.vote_at = new Date();
+        vote.voter = $scope.userInfo.loggedInUser;
+        
+        $http.post(votesUrl, vote)
+            .success(function(){
+                refreshData();
+            })
+            .error(function(response){
+                
+            });
+    }
+      
+}

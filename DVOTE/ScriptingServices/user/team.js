@@ -178,10 +178,13 @@ function readT_teamList() {
         while (resultSet.next()) {
             result.push(createEntity(resultSet));
         }
-        var jsonUser = {
-            "loggedInUser" : user
-        }
-         result.push(jsonUser);
+
+        var jsonUser = {};
+        jsonUser.userInfo = {};
+        jsonUser.userInfo.loggedInUser = user;
+        jsonUser.userInfo.voted = isVoted(connection);
+
+        result.push(jsonUser);
          
         var text = JSON.stringify(result, null, 2);
         response.getWriter().println(text);
@@ -191,6 +194,18 @@ function readT_teamList() {
     } finally {
         connection.close();
     }
+}
+
+function isVoted(connection){
+        var sql = "SELECT COUNT(*) AS VOTED FROM T_VOTE WHERE VOTER = ?";
+        var statement = connection.prepareStatement(sql);
+        statement.setString(1, user);
+        
+        var resultSet = statement.executeQuery();
+        resultSet.next();
+        var voted = resultSet.getInt("VOTED");
+        
+        return voted > 0;
 }
 
 //create entity as JSON object from ResultSet current Row

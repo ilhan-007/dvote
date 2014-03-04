@@ -17,6 +17,7 @@ var limit = xss.escapeSql(request.getParameter('limit'));
 var offset = xss.escapeSql(request.getParameter('offset'));
 var desc = xss.escapeSql(request.getParameter('desc'));
 var result = xss.escapeSql(request.getParameter('result'));
+var resultPlain = xss.escapeSql(request.getParameter('resultPlain'));
 
 if (limit === null) {
 	limit = 100;
@@ -40,6 +41,8 @@ if(!hasConflictingParameters()){
             metadataT_team();
         } else if(result !== null){
             getVotingResult();
+        } else if (resultPlain !== null){
+            getVotingResultPlain();
         } else{
             readT_teamList();
         }
@@ -213,6 +216,33 @@ function getVotingResult(){
     }
 }
 
+function getVotingResultPlain(){
+    var connection = datasource.getConnection();
+    try {
+        var result = "team,votes";
+        
+        var sql = "SELECT TEAM.ID, TEAM.NAME, TEAM.LEADER, COUNT(VOTE.TEAM_ID) AS VOTES FROM T_TEAM AS TEAM"
+                   +" JOIN T_VOTE AS VOTE ON TEAM.ID = VOTE.TEAM_ID GROUP BY TEAM.ID, TEAM.NAME, TEAM.LEADER";
+        var statement = connection.prepareStatement(sql);
+        var resultSet = statement.executeQuery();
+        
+        var value;
+        while (resultSet.next()) {
+            result+="\n"
+            var teamName = resultSet.getString("NAME");
+            var votes = resultSet.getInt("VOTES");
+            result = result + teamName + ","+ votes;
+        }
+        response.setHeader("Content-Type", "text/plain");
+        // var text = JSON.stringify(result, null, 2);
+        response.getWriter().println(result);
+    } catch(e){
+        var errorCode = javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+        makeError(errorCode, errorCode, e.message);
+    } finally {
+        connection.close();
+    }
+}
 //create entity as JSON object from ResultSet current Row
 function createResultEntity(resultSet, data) {
     var result = {};

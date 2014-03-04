@@ -9,15 +9,7 @@
 
     <title>DVOTE APP</title>
     
-    <!-- Bootstrap core CSS -->
     <link href="../../../components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>	  
-    <![endif]-->
   </head>
 
   <body style="height: 100%;">
@@ -26,62 +18,70 @@
     <div id="wrap" style="min-height: 100%; height: auto; margin: 0 auto -60px; padding: 0 0 60px;">
 
       <!-- Fixed navbar -->
-      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-          <!-- Brand and toggle get grouped for better mobile display -->
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">DVOTE APP</a>
-          </div>
-          
-          <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul id="main-menu" class="nav navbar-nav">
+          <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://dirigibleide.hana.ondemand.com/dirigible/web-secured/DVOTE/admin/">DVOTE APP</a>
+              </div>
               
-            </ul>
-    
-          </div><!--/.nav-collapse -->
-      </nav>
+              <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul id="main-menu" class="nav navbar-nav">
+                  
+                </ul>
+        
+              </div><!--/.nav-collapse -->
+          </nav>
 
-	  <div class="jumbotron visible-lg visible-md" >
-		<div class="container">
-    			<div id="sloganHolder">
-					Your slogan here...
-				</div>
-		</div>
 	  </div>
-	  
-      <div class="page-header well visible-sm visible-xs">
-            <h3 class="page-banner">
-                DVOTE APP
-            </h3>
-      </div>
-	  
-	  <!-- Begin page content -->
-	  <div class="container" style="padding: 50px 15px 0;">
-		<div id="content" >
-        	<br/><br/>
-            <p class="lead">Your welcome message here...</p>
-            <br/><br/>
-		</div>
-	  </div>
-	 
-	  
+      
+      </br>
+      </br>
+      </br>
+      </br>
+	  <div class="panel panel-default">
+      
+        <div  class="panel-heading">
+            STANDINGS
+        </div>
+        
+         <div ng-app ng-controller="ManageController" class="panel-body">
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th>name</th>
+						<th>leader</th>
+                        <th>votes</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr  ng-repeat="entry in data">
+						<td>{{entry.name}}</td> 
+						<td>{{entry.leader}}</td>
+                        <td>{{entry.votes}}</td>
+					</tr>
+				</tbody>
+			</table>
+	    </div>
     </div>
-
+	 
+    <div id="chart">
+      <div class="container">
+        
+      </div>
+    </div>
+    
     <div id="footer" style="position: fixed; bottom: 0; width: 100%; background-color: #f5f5f5;">
       <div class="container">
         <p class="text-muted credit">Copyright &copy; Your copyright</p>
       </div>
     </div>
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
     <script src="../../../components/jquery/jquery.min.js"></script>
     <script src="../../../components/bootstrap/dist/js/bootstrap.min.js"></script>
     
@@ -92,7 +92,7 @@
 				$.each(data, function(i, item) {
 					var itemContent = "";
 					if (item.subMenu.length > 0) {
-						itemContent += "<li class=\"dropdown\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + item.name + " <b class=\"caret\"></b></a>";
+						itemContent += "<li class=\"dropdown\"><a href=\"home\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">" + item.name + " <b class=\"caret\"></b></a>";
 						itemContent += "<ul class=\"dropdown-menu\">";
 						$.each(item.subMenu, function(j, subitem) {
 							itemContent += "<li><a href=\"" + subitem.link + "\" >" + subitem.name + "</a></li>";
@@ -110,5 +110,70 @@
 		  });
 		  		  
 	</script>
+    
+
+	<script src="../../../components/angular/angular.min.js"></script>
+	<script src="../../../components/angular-resource/angular-resource.min.js"></script>
+
+	<script type="text/javascript">
+		function ManageController($scope, $http){
+			
+			var url = '/dirigible/js-secured/DVOTE/admin/team.js?result=true';
+			
+			$http.get(url)
+			.success(function(data){
+				$scope.data = data;
+			});
+		}
+	</script>
+    
+    <script src="../../../components/d3/d3.v3.min.js"></script>
+    <script>
+    
+    var width = 960,
+        height = 500,
+        radius = Math.min(width, height) / 3;
+    
+    var color = d3.scale.ordinal()
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    
+    var arc = d3.svg.arc()
+        .outerRadius(radius - 10)
+        .innerRadius(0);
+    
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function(d) { return d.votes; });
+    
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .attr("transform", "translate(" + ((width / 2)+100)+ "," + ((height / 2)-60) + ")");
+    
+    d3.csv("https://dirigibleide.hana.ondemand.com:443/dirigible/js-sandbox/DVOTE/admin/team.js?resultPlain=true", function(error, data) {
+    
+      data.forEach(function(d) {
+        d.votes = +d.votes;
+      });
+    
+      var g = svg.selectAll(".arc")
+          .data(pie(data))
+        .enter().append("g")
+          .attr("class", "arc");
+    
+      g.append("path")
+          .attr("d", arc)
+          .style("fill", function(d) { return color(d.data.team); });
+    
+      g.append("text")
+          .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+          .attr("dy", ".35em")
+          .style("text-anchor", "middle")
+          .text(function(d) { return d.data.team; });
+    
+    });
+    
+    </script>
   </body>
 </html>
