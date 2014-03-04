@@ -18,7 +18,7 @@ var offset = xss.escapeSql(request.getParameter('offset'));
 var desc = xss.escapeSql(request.getParameter('desc'));
 
 if (limit === null) {
-	limit = 100;
+    limit = 100;
 }
 if (offset === null) {
 	offset = 0;
@@ -184,6 +184,7 @@ function readT_voteList() {
         while (resultSet.next()) {
             result.push(createEntity(resultSet));
         }
+        
         var text = JSON.stringify(result, null, 2);
         response.getWriter().println(text);
     } catch(e){
